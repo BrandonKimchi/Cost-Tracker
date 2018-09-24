@@ -21,12 +21,20 @@
     </android.support.design.widget.AppBarLayout>
 
     <ViewSwitcher
+        android:id="@+id/contentViewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="569dp">
 
         <include
             android:id="@+id/statusView"
-            layout="@layout/content_main"
+            layout="@layout/content_balance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            android:id="@+id/addTransactionView"
+            layout="@layout/create_transaction"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </ViewSwitcher>
 
