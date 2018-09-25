@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            Intent intent = new Intent(view.getContext(), CreateTransactionActivity.class);
+            startActivity(intent);
             }
         });
 
@@ -105,7 +105,8 @@ public class MainActivity extends AppCompatActivity
 //        int index = parent.indexOfChild(curView);
 
         if (id == R.id.nav_transaction) {
-
+            Intent intent = new Intent(this, CreateTransactionActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_budgets) {
             Intent intent = new Intent(this, CreateBudgetActivity.class);
             startActivity(intent);
