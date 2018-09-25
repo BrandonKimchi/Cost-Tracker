@@ -5,17 +5,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/transaction"
+            android:id="@+id/nav_transaction"
             android:icon="@drawable/ic_menu_camera"
             android:title="Add Transaction" />
         <item
-            android:id="@+id/balance"
+            android:id="@+id/nav_balance"
             android:icon="@drawable/ic_menu_gallery"
             android:title="View Balance" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_budgets"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="View/Edit Budgets" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

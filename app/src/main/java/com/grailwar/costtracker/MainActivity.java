@@ -1,5 +1,6 @@
 package com.grailwar.costtracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -99,18 +100,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here. Use this to change the content view
         int id = item.getItemId();
 
-        ConstraintLayout curView = findViewById(R.id.statusView);
-        ViewGroup parent = (ViewGroup) curView.getParent();
-        int index = parent.indexOfChild(curView);
+//        ConstraintLayout curView = findViewById(R.id.statusView);
+//        ViewGroup parent = (ViewGroup) curView.getParent();
+//        int index = parent.indexOfChild(curView);
 
-        if (id == R.id.transaction) {
-            parent.removeView(curView);
+        if (id == R.id.nav_transaction) {
 
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_budgets) {
+            Intent intent = new Intent(this, CreateBudgetActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.balance) {
+        } else if (id == R.id.nav_balance) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
