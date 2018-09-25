@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateBudgetActivity" />
-        <activity android:name=".CreateTransactionActivity"></activity>
+        <activity android:name=".CreateTransactionActivity" />
+        <activity android:name=".ViewTransactionHistoryActivity"></activity>
     </application>
 
 </manifest>

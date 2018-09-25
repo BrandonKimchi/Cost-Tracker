@@ -100,18 +100,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here. Use this to change the content view
         int id = item.getItemId();
 
-//        ConstraintLayout curView = findViewById(R.id.statusView);
-//        ViewGroup parent = (ViewGroup) curView.getParent();
-//        int index = parent.indexOfChild(curView);
-
         if (id == R.id.nav_transaction) {
             Intent intent = new Intent(this, CreateTransactionActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_budgets) {
             Intent intent = new Intent(this, CreateBudgetActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_history) {
+            Intent intent = new Intent(this, ViewTransactionHistoryActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_balance) {
 
         }
