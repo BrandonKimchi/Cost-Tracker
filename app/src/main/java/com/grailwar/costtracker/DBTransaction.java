@@ -11,7 +11,13 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class DBTransaction {
 
-    @PrimaryKey
+    public DBTransaction(long amount, String category){
+        this.amount = amount;
+        this.category = category;
+        this.timeStamp = System.currentTimeMillis();
+    }
+
+    @PrimaryKey(autoGenerate = true)
     private int uid;
 
     public int getUid() {
