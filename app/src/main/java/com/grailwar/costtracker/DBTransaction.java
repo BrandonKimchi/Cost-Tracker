@@ -4,6 +4,10 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Brandon on 9/25/2018.
  */
@@ -62,6 +66,14 @@ public class DBTransaction {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+
+    @Override
+    public String toString() {
+        Date d = new Date(this.timeStamp);
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        return "" + this.amount + ": " + df.format(d);
     }
 
 }
