@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".CreateBudgetActivity" />
         <activity android:name=".CreateTransactionActivity" />
-        <activity android:name=".ViewTransactionHistoryActivity"></activity>
+        <activity android:name=".ViewTransactionHistoryActivity" />
+        <activity android:name=".CreateBalanceActivity"></activity>
     </application>
 
 </manifest>

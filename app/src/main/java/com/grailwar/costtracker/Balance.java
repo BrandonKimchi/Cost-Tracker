@@ -11,6 +11,11 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class Balance {
 
+    public Balance (String name, long balance) {
+        this.name = name;
+        this.balance = balance;
+    }
+
     @PrimaryKey(autoGenerate = true)
     private int uid;
 

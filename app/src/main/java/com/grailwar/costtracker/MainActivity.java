@@ -143,6 +143,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_balance) {
 
+        } else if (id == R.id.nav_create_balance) {
+            Intent intent = new Intent(this, CreateBalanceActivity.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

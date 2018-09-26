@@ -21,5 +21,11 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="View/Edit Budgets" />
     </group>
+    <group >
+        <item
+            android:id="@+id/nav_create_balance"
+            android:icon="@android:drawable/ic_input_get"
+            android:title="Create Balance" />
+    </group>
 
 </menu>
