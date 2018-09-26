@@ -35,7 +35,8 @@ public class AppDatabaseFactory {
 
 }
 
-@Database(entities = {DBTransaction.class}, version = 1)
+@Database(entities = {DBTransaction.class, Balance.class}, version = 1)
 abstract class AppDatabase extends RoomDatabase {
     public abstract DBTransactionDAO dbTransactionDao();
+    public abstract BalanceDAO balanceDao();
 }

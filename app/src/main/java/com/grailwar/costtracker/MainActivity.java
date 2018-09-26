@@ -1,5 +1,6 @@
 package com.grailwar.costtracker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -17,6 +18,9 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,6 +50,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Get balance
+        getBalance(this);
+
 
         // Setup Budgets View
         // Get budgets from database
@@ -60,6 +67,31 @@ public class MainActivity extends AppCompatActivity
 
         ListView budgetsListView = (ListView) findViewById(R.id.budgetsListView);
         budgetsListView.setAdapter(budgetsAdapter);
+    }
+
+    /**
+     * Get balance from database and set it in the view
+     */
+    private void getBalance(final Context context) {
+        new Thread(new Runnable() {
+            public void run() {
+                AppDatabase db = AppDatabaseFactory.build(context);
+                List<Balance> balances = db.balanceDao().getAll();
+                final String balanceText;
+                if(balances.size() > 0) {
+                    balanceText = balances.get(0).toString();
+                } else {
+                    balanceText = "No Balance";
+                }
+
+                final TextView balanceTextView = (TextView) findViewById(R.id.balance_text_view);
+                balanceTextView.post(new Runnable() {
+                    public void run() {
+                        balanceTextView.setText(balanceText);
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
