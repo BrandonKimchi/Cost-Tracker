@@ -1,5 +1,6 @@
 package com.grailwar.costtracker;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -17,7 +18,7 @@ public interface BalanceDAO {
     Balance getBalance(int uid);
 
     @Query("SELECT * FROM balance")
-    List<Balance> getAll();
+    LiveData<List<Balance>> getAll();
 
     @Insert
     void insert(Balance balance);
