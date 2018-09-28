@@ -75,21 +75,28 @@ public class MainActivity extends AppCompatActivity
     private void getBalance(final Context context) {
         new Thread(new Runnable() {
             public void run() {
-                AppDatabase db = AppDatabaseFactory.build(context);
-                List<Balance> balances = db.balanceDao().getAll();
-                final String balanceText;
-                if(balances.size() > 0) {
-                    balanceText = balances.get(0).toString();
-                } else {
-                    balanceText = "No Balance";
-                }
+            AppDatabase db = AppDatabaseFactory.build(context);
+//                List<Balance> balances = db.balanceDao().getAll();
+            final String balanceText;
+//                if(balances.size() > 0) {
+//                    balanceText = balances.get(0).toString();
+//                } else {
+//                    balanceText = "No Balance";
+//                }
 
-                final TextView balanceTextView = (TextView) findViewById(R.id.balance_text_view);
-                balanceTextView.post(new Runnable() {
-                    public void run() {
-                        balanceTextView.setText(balanceText);
-                    }
-                });
+            Balance bal = db.balanceDao().getBalanceWithName("main");
+            if(bal == null) {
+                balanceText = "No Balance";
+            } else {
+                balanceText = bal.toString();
+            }
+
+            final TextView balanceTextView = (TextView) findViewById(R.id.balance_text_view);
+            balanceTextView.post(new Runnable() {
+                public void run() {
+                    balanceTextView.setText(balanceText);
+                }
+            });
             }
         }).start();
     }

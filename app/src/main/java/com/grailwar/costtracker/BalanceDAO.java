@@ -20,6 +20,9 @@ public interface BalanceDAO {
     @Query("SELECT * FROM balance")
     LiveData<List<Balance>> getAll();
 
+    @Query("SELECT * FROM balance WHERE name == :name LIMIT 1")
+    Balance getBalanceWithName(String name);
+
     @Insert
     void insert(Balance balance);
 

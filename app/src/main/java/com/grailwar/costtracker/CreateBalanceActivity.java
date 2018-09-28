@@ -33,12 +33,19 @@ public class CreateBalanceActivity extends AppCompatActivity {
                 EditText balanceField = (EditText) findViewById(R.id.create_balance_value_field);
                 long balance = Long.parseLong(balanceField.getText().toString());
 
-                final Balance b = new Balance(name, balance);
+//                final Balance b = new Balance(name, balance);
+                // for now, only allow a single balance
+                final Balance b = new Balance("main", balance);
 
                 new Thread(new Runnable() {
                     public void run() {
                         AppDatabase db = AppDatabaseFactory.build(view.getContext());
-                        db.balanceDao().insert(b);
+                        Balance bal = db.balanceDao().getBalanceWithName("main");
+                        if(bal != null) {
+                            db.balanceDao().updateBalance(b);
+                        } else {
+                            db.balanceDao().insert(b);
+                        }
                     }
                 }).start();
                 finish();
