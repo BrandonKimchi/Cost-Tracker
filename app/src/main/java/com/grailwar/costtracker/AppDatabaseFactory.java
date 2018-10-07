@@ -14,15 +14,6 @@ public class AppDatabaseFactory {
 
     private static AppDatabase db;
 
-//    public AppDatabaseFactory(Context context) {
-//        if (db == null) {
-//           db = Room.databaseBuilder(
-//                   context.getApplicationContext(),
-//                   AppDatabase.class, "costly-db"
-//           ).build();
-//        }
-//    }
-
     public static AppDatabase build(Context context) {
         if (db == null) {
             db = Room.databaseBuilder(
@@ -30,6 +21,10 @@ public class AppDatabaseFactory {
                     AppDatabase.class, "costly-db"
             ).build();
         }
+        return db;
+    }
+
+    public static AppDatabase get() {
         return db;
     }
 

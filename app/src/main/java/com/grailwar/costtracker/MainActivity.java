@@ -1,11 +1,12 @@
 package com.grailwar.costtracker;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,15 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private AppModel appModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,34 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Setup our DB accessor
+        // Must be done first so we can use this elsewhere in the app
+        new Thread(() -> {
+            this.appModel = AppModelFactory.build(this);
+            this.appModel.getLiveBalance().observe(this, new Observer<Balance>() {
+                @Override
+                public void onChanged(@NonNull final Balance b) {
+                    setBalanceInView(b);
+                }
+            });
+        }).start();
+
+
         // Get balance
-        getBalance(this);
+//        balanceViewModel = ViewModelProviders.of(this).get(AppModel.class);
+//        balanceViewModel.getBalance().observe(MainActivity.this, new Observer<Balance>() {
+//            @Override
+//            public void onChanged(Balance bal) {
+//                final TextView balanceTextView = (TextView) findViewById(R.id.balance_text_view);
+//                balanceTextView.post(new Runnable() {
+//                    public void run() {
+//                        balanceTextView.setText(bal.toString());
+//                    }
+//                });
+//            }
+//        });
+
+//        getBalance(this);
 
 
         // Setup Budgets View
@@ -69,34 +95,46 @@ public class MainActivity extends AppCompatActivity
         budgetsListView.setAdapter(budgetsAdapter);
     }
 
+    private void setBalanceInView(final Balance b) {
+        final TextView balanceTextView = (TextView) findViewById(R.id.balance_text_view);
+        balanceTextView.setText(b.toString());
+    }
+
     /**
      * Get balance from database and set it in the view
      */
     private void getBalance(final Context context) {
         new Thread(new Runnable() {
             public void run() {
-            AppDatabase db = AppDatabaseFactory.build(context);
+                AppDatabase db = AppDatabaseFactory.build(context);
+                final String balanceText;
 //                List<Balance> balances = db.balanceDao().getAll();
-            final String balanceText;
+
 //                if(balances.size() > 0) {
 //                    balanceText = balances.get(0).toString();
 //                } else {
 //                    balanceText = "No Balance";
 //                }
 
-            Balance bal = db.balanceDao().getBalanceWithName("main");
-            if(bal == null) {
-                balanceText = "No Balance";
-            } else {
-                balanceText = bal.toString();
-            }
 
-            final TextView balanceTextView = (TextView) findViewById(R.id.balance_text_view);
-            balanceTextView.post(new Runnable() {
-                public void run() {
-                    balanceTextView.setText(balanceText);
+                Balance bal = db.balanceDao().getBalanceWithName("main");
+                if(bal == null) {
+                    balanceText = "No Balance";
+                } else {
+                    balanceText = bal.toString();
                 }
-            });
+
+                final TextView balanceTextView = (TextView) findViewById(R.id.balance_text_view);
+                balanceTextView.post(new Runnable() {
+                    public void run() {
+                        balanceTextView.setText(balanceText);
+                    }
+                });
+
+//                LiveData<Balance> liveBalance = db.balanceDao().getLiveBalanceWithName("main");
+//                liveBalance.observe(, balance -> {
+//
+//                });
             }
         }).start();
     }

@@ -8,6 +8,8 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+
 /**
  * Created by Brandon on 9/25/2018.
  */
@@ -23,7 +25,10 @@ public interface BalanceDAO {
     @Query("SELECT * FROM balance WHERE name == :name LIMIT 1")
     Balance getBalanceWithName(String name);
 
-    @Insert
+    @Query("SELECT * FROM balance WHERE name == :name LIMIT 1")
+    LiveData<Balance> getLiveBalanceWithName(String name);
+
+    @Insert(onConflict = REPLACE)
     void insert(Balance balance);
 
     @Update
