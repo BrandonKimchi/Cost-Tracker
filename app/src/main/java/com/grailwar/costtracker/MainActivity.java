@@ -1,11 +1,8 @@
 package com.grailwar.costtracker;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -52,7 +49,11 @@ public class MainActivity extends AppCompatActivity
 
         // Setup our DB accessor
         // Must be done first so we can use this elsewhere in the app
-        this.appModel = AppModelFactory.build(this);
+        this.appModel = AppModelFactory.initialBuild(this);
+        this.setBalanceInView(appModel.getMainBalance());
+        this.appModel.subscribeToMainBalance((Balance b) -> {
+            setBalanceInView(b);
+        });
         new Thread(() -> {
 //            this.appModel.getLiveBalance().observe(this, new Observer<Balance>() {
 //                @Override
@@ -61,9 +62,6 @@ public class MainActivity extends AppCompatActivity
 //                }
 //            });
         }).start();
-        this.appModel.subscribeToMainBalance((Balance b) -> {
-            setBalanceInView(b);
-        });
 
 
         // Get balance

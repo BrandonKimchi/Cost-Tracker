@@ -10,11 +10,18 @@ public class AppModelFactory {
 
     static AppModel model;
 
-    public static AppModel build(Context c) {
+    public static AppModel initialBuild(Context c) {
         if(model == null) {
             model = new AppModel(c);
         }
 
+        return model;
+    }
+
+    public static AppModel get() {
+        if(model == null) {
+            throw new IllegalStateException("Make sure you build the model first.");
+        }
         return model;
     }
 

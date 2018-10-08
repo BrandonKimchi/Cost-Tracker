@@ -1,9 +1,5 @@
 package com.grailwar.costtracker;
 
-import android.app.Activity;
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.view.View;
 
@@ -21,45 +17,24 @@ public class AppModel {
 
     private AppDatabase db;
 
-    //TODO
-    /*
-    * tear all this down, just make a class to store state
-    * when you write updates to the state through getters/setters, write to the db
-    *
-    * register runnables to POST to the view components that we register as listening for diff
-    * values (p much just the balance for now)
-    *
-    * get a singleton factory thing setup for this state tracker, smash all the livedata crap from
-    * the DB.
-    *
-    *
-    * Actually the Room LiveData may still work if we store it here then pass it out, so let's try that.
-     */
 
     public AppModel(Context context) {
         this.balanceSubscribers = new HashMap<>();
-        new Thread(() -> {
-            this.db = AppDatabaseFactory.build(context);
-            mainBalance = db.balanceDao().getBalanceWithName(Constants.MAIN_BALANCE);
-            if (mainBalance == null) {
-                db.balanceDao().insert(new Balance("main", 0));
-            }
-            mainBalance = db.balanceDao().getBalanceWithName(Constants.MAIN_BALANCE);
-            this.setMainBalance(mainBalance);
-
-//            liveBalance = db.balanceDao().getLiveBalanceWithName(Constants.MAIN_BALANCE);
-        }).start();
-
-
+        this.mainBalance = new Balance(Constants.MAIN_BALANCE, 0);
+//        new Thread(() -> {
+//            this.db = AppDatabaseFactory.initialBuild(context);
+//            mainBalance = db.balanceDao().getBalanceWithName(Constants.MAIN_BALANCE);
+//            if (mainBalance == null) {
+//                db.balanceDao().insert(new Balance("main", 0));
+//            }
+//            mainBalance = db.balanceDao().getBalanceWithName(Constants.MAIN_BALANCE);
+//            this.setMainBalance(mainBalance);
+//        }).start();
     }
 
     public Balance getMainBalance() {
         return mainBalance;
     }
-
-//    public LiveData<Balance> getLiveBalance() {
-//        return liveBalance;
-//    }
 
     /**
      * Give a runnable to be run when main balance is updated
@@ -91,9 +66,9 @@ public class AppModel {
             this.mainBalance = bal;
 
             // Update the db backing with the new value
-            new Thread(() -> {
-                db.balanceDao().updateBalance(mainBalance);
-            }).start();
+//            new Thread(() -> {
+//                db.balanceDao().updateBalance(mainBalance);
+//            }).start();
         }
         // Notify the subscribers
         Set<Consumer<Balance>> updates = this.balanceSubscribers.get(Constants.MAIN_BALANCE);

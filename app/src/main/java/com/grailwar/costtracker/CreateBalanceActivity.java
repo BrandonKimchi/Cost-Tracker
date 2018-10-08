@@ -37,17 +37,19 @@ public class CreateBalanceActivity extends AppCompatActivity {
                 // for now, only allow a single balance
                 final Balance b = new Balance("main", balance);
 
-                new Thread(new Runnable() {
-                    public void run() {
-                        AppDatabase db = AppDatabaseFactory.build(view.getContext());
-                        Balance bal = db.balanceDao().getBalanceWithName("main");
-                        if(bal != null) {
-                            db.balanceDao().updateBalance(b);
-                        } else {
-                            db.balanceDao().insert(b);
-                        }
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        AppDatabase db = AppDatabaseFactory.initialBuild(view.getContext());
+//                        Balance bal = db.balanceDao().getBalanceWithName("main");
+//                        if(bal != null) {
+//                            db.balanceDao().updateBalance(b);
+//                        } else {
+//                            db.balanceDao().insert(b);
+//                        }
+//                    }
+//                }).start();
+                AppModel model = AppModelFactory.get();
+                model.setMainBalance(b);
                 finish();
             }
         });
