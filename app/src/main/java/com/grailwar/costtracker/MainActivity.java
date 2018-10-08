@@ -52,15 +52,18 @@ public class MainActivity extends AppCompatActivity
 
         // Setup our DB accessor
         // Must be done first so we can use this elsewhere in the app
+        this.appModel = AppModelFactory.build(this);
         new Thread(() -> {
-            this.appModel = AppModelFactory.build(this);
-            this.appModel.getLiveBalance().observe(this, new Observer<Balance>() {
-                @Override
-                public void onChanged(@NonNull final Balance b) {
-                    setBalanceInView(b);
-                }
-            });
+//            this.appModel.getLiveBalance().observe(this, new Observer<Balance>() {
+//                @Override
+//                public void onChanged(@NonNull final Balance b) {
+//                    setBalanceInView(b);
+//                }
+//            });
         }).start();
+        this.appModel.subscribeToMainBalance((Balance b) -> {
+            setBalanceInView(b);
+        });
 
 
         // Get balance

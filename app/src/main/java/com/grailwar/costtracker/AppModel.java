@@ -7,12 +7,17 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.view.View;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
 public class AppModel {
     private Balance mainBalance;
-    private LiveData<Balance> liveBalance;
-    private Map<View, Runnable> mainBalanceSubscribers;
+//    private LiveData<Balance> liveBalance;
+    private Map<String, Set<Consumer<Balance>>> balanceSubscribers; // map balance name to updaters list
 
     private AppDatabase db;
 
@@ -32,24 +37,42 @@ public class AppModel {
      */
 
     public AppModel(Context context) {
-        this.db = AppDatabaseFactory.build(context);
-
+        this.balanceSubscribers = new HashMap<>();
         new Thread(() -> {
+            this.db = AppDatabaseFactory.build(context);
             mainBalance = db.balanceDao().getBalanceWithName(Constants.MAIN_BALANCE);
             if (mainBalance == null) {
                 db.balanceDao().insert(new Balance("main", 0));
             }
             mainBalance = db.balanceDao().getBalanceWithName(Constants.MAIN_BALANCE);
-            liveBalance = db.balanceDao().getLiveBalanceWithName(Constants.MAIN_BALANCE);
+            this.setMainBalance(mainBalance);
+
+//            liveBalance = db.balanceDao().getLiveBalanceWithName(Constants.MAIN_BALANCE);
         }).start();
+
+
     }
 
     public Balance getMainBalance() {
         return mainBalance;
     }
 
-    public LiveData<Balance> getLiveBalance() {
-        return liveBalance;
+//    public LiveData<Balance> getLiveBalance() {
+//        return liveBalance;
+//    }
+
+    /**
+     * Give a runnable to be run when main balance is updated
+     * UI elements can use this to update their values in a view when the balance is changed.
+     * @param updater
+     */
+    public void subscribeToMainBalance(Consumer<Balance> updater) {
+        Set<Consumer<Balance>> updaters = this.balanceSubscribers.get(Constants.MAIN_BALANCE);
+        if (updaters == null) {
+            updaters = new HashSet<Consumer<Balance>>();
+            this.balanceSubscribers.put(Constants.MAIN_BALANCE, updaters);
+        }
+        updaters.add(updater);
     }
 
     /**
@@ -71,10 +94,12 @@ public class AppModel {
             new Thread(() -> {
                 db.balanceDao().updateBalance(mainBalance);
             }).start();
-
-            // Notify the subscribers
-            for (Runnable update : mainBalanceSubscribers.values()) {
-                update.run();
+        }
+        // Notify the subscribers
+        Set<Consumer<Balance>> updates = this.balanceSubscribers.get(Constants.MAIN_BALANCE);
+        if(updates != null) {
+            for (Consumer<Balance> updater : this.balanceSubscribers.get(Constants.MAIN_BALANCE)) {
+                updater.accept(bal);
             }
         }
     }
