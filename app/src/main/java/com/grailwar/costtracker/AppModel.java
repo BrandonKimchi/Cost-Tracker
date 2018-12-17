@@ -79,7 +79,7 @@ public class AppModel {
         }
     }
 
-    //        new Thread(new Runnable() {
+//        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
 //                db = AppDatabaseFactory.get();

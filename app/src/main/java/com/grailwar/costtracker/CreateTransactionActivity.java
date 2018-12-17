@@ -27,10 +27,16 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 long amount = Long.parseLong(amountField.getText().toString());
                 final DBTransaction transaction = new DBTransaction(amount, "asdf");
 
+                AppModel model = AppModelFactory.get();
+
                 new Thread(new Runnable() {
                     public void run() {
                         AppDatabase db = AppDatabaseFactory.build(view.getContext());
                         db.dbTransactionDao().insert(transaction);
+
+                        long newVal = model.getMainBalance().getBalance() - amount;
+                        Balance newBalance = new Balance(model.getMainBalance().getName(), newVal);
+                        model.setMainBalance(newBalance);
                     }
                 }).start();
                 finish();
